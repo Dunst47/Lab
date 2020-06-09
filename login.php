@@ -6,17 +6,17 @@ $con= new DBConnector;
 if(isset($_POST['btn-login'])){
 	$username =$_POST['username'];
 	$password =$_POST['password'];
-	$instance=User::create();
+	$instance =new User('','','','$username','$password','','');
+	//$instance=User::create();
 	$instance->setUsername($username);
 	$instance->setPassword($password);
 	
 	
 	if($instance->isPasswordCorrect()==true){
 		
-		
+		$instance->createUserSession();
 		$instance->login();
 		$con->closeDatabase();
-		$instance->createUserSession();
 		
 	}
 	else if($instance->isPasswordCorrect()==false) {
@@ -24,12 +24,16 @@ if(isset($_POST['btn-login'])){
 		header("Location:login.php");
 		
 	}
+	else{
+		$con->closeDatabase();
+		header("Location:kiboko.php");
+	}
 }
 ?>
 <html>
 <head>
 <title>
-Login
+Title goes here
 </title>
 <script type="text/javascript" src="validate.js"></script>
 <link rel="stylesheet" type="text/css" href="validate.css">
@@ -41,7 +45,7 @@ Login
 <td><input type="text" name="username" placeholder="Username" required ></td>
 </tr>
 <tr>
-<td><input type="password" name="password" placeholder="Password" required ></td>
+<td><input type="text" name="password" placeholder="password" required ></td>
 </tr>
 <tr>
 <td><button type="submit" name="btn-login"><strong>LOGIN</strong></button></td>
